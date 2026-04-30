@@ -28,18 +28,26 @@ document.addEventListener("DOMContentLoaded", () => {
         activityCard.className = "activity-card";
 
         const spotsLeft = details.max_participants - details.participants.length;
-        const participants = details.participants.length
-          ? details.participants
-              .map((participant) => `<li>${escapeHtml(participant)}</li>`)
+        const participantsCount = details.participants.length;
+        const sortedParticipants = [...details.participants].sort((a, b) =>
+          a.localeCompare(b)
+        );
+
+        const participants = participantsCount
+          ? sortedParticipants
+              .map(
+                (participant) =>
+                  `<li class="participant-item">${escapeHtml(participant)}</li>`
+              )
               .join("")
-          : "<li>No participants yet</li>";
+          : '<li class="participant-item participant-empty">No participants yet</li>';
 
         activityCard.innerHTML = `
           <h4>${escapeHtml(name)}</h4>
           <p>${escapeHtml(details.description)}</p>
           <p><strong>Schedule:</strong> ${escapeHtml(details.schedule)}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          <p><strong>Participants:</strong></p>
+          <p><strong>Participants (${participantsCount}):</strong></p>
           <ul class="participants-list">${participants}</ul>
         `;
 
